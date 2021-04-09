@@ -13,7 +13,7 @@ def foo():
     b = MyClass()
     c = [1, 2, 3]
     d = pandas.DataFrame()
-    e = {"a": pandas.Series()}
+    e = {"a": pandas.Series(dtype="float64")}
     f = collections.Counter()
     g = True
     print_vars()
@@ -26,7 +26,7 @@ def is_builtin_class_instance(obj):
 def print_vars():
     frame = sys._getframe(1)
     for var, val in frame.f_locals.items():
-        print(var, is_builtin_class_instance(val))
+        print(f"{var}: {is_builtin_class_instance(val)}")
 
 
 if __name__ == '__main__':
