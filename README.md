@@ -36,3 +36,13 @@ g: True
 The task2 branch contains a Java console application. It takes the path to the Python interpreter and executes the following command `<python-path> m timeit -r 10`, where \<python-path\> -- the string that the user entered. While waiting, the number of seconds from the start is displayed. At the end of the process, its result is also displayed.
 
 ### Example
+
+```
+Python interpreter path: /usr/bin/python3
+Time elapsed: 1s
+Time elapsed: 2s
+Time elapsed: 3s
+Time elapsed: 4s
+Time elapsed: 5s
+50000000 loops, best of 10: 8.45 nsec per loop
+```
