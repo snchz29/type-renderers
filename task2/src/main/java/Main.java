@@ -1,35 +1,36 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static java.lang.Thread.sleep;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println("Python interpreter path: ");
+        // Reading input
+        System.out.print("Python interpreter path: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String path = reader.readLine();
-        Thread elapsedTimeCountingThread = new Thread(() -> {
-            int i = 0;
-            while (true) {
-                try {
-                    sleep(1000);
-                    System.out.println("Time elapsed: " + ++i + "s");
-                } catch (InterruptedException e) {
-                    break;
-                }
+        final int[] seconds = {0};
+        // Creating timer
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Time elapsed: " + ++seconds[0] + "s");
             }
-        });
+        }, 1000, 1000);
+
+        // Creating process to execute command
         var processBuilder = new ProcessBuilder();
         processBuilder.command(path, "-m", "timeit", "-r 10");
-
         var process = processBuilder.start();
-
-        elapsedTimeCountingThread.start();
+        // Waiting for completion process
         process.waitFor();
-        elapsedTimeCountingThread.interrupt();
-        elapsedTimeCountingThread.join();
+        // Stop timer
+        timer.cancel();
 
+        // Printing process output
         try (var processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = processReader.readLine()) != null) {
