@@ -11,9 +11,21 @@ public class Main {
         System.out.print("Python interpreter path: ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String path = reader.readLine();
-        final int[] seconds = {0};
+
+        // Creating process to execute command
+        var processBuilder = new ProcessBuilder();
+        processBuilder.command(path, "-m", "timeit", "-r 10");
+        Process process = null;
+        try {
+            process = processBuilder.start();
+        } catch (IOException e){
+            System.err.println(e.getMessage());
+            return;
+        }
+
         // Creating timer
         Timer timer = new Timer();
+        final int[] seconds = {0};
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -21,10 +33,6 @@ public class Main {
             }
         }, 1000, 1000);
 
-        // Creating process to execute command
-        var processBuilder = new ProcessBuilder();
-        processBuilder.command(path, "-m", "timeit", "-r 10");
-        var process = processBuilder.start();
         // Waiting for completion process
         process.waitFor();
         // Stop timer
